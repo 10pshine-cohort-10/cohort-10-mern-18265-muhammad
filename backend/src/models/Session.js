@@ -15,13 +15,6 @@ const sessionSchema = new mongoose.Schema(
             select: false
         },
 
-        refreshTokenVersion: {
-            type: Number,
-            default: 0,
-            min: 0,
-            required: true
-        },
-
         expiresAt: {
             type: Date,
             required: true
@@ -66,6 +59,11 @@ sessionSchema.index(
 
 // Efficiently find a user's sessions
 sessionSchema.index({ user: 1, revokedAt: 1 });
+
+sessionSchema.index(
+    { refreshTokenHash: 1 },
+    { unique: true }
+);
 
 const Session = mongoose.model("Session", sessionSchema);
 
